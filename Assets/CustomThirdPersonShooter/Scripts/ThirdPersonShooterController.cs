@@ -33,6 +33,7 @@ public class ThirdPersonShooterController : MonoBehaviour
     private Animator animator;
     private BulletCounter bulletCounter;
 
+
     private void Awake()
     {
         starterAssetsInputs = GetComponent<StarterAssetsInputs>();
@@ -43,6 +44,7 @@ public class ThirdPersonShooterController : MonoBehaviour
 
     private void Update()
     {
+        #region SHOOT HITSCAN
         //get fire point position
         Vector3 firePos = firePoint.transform.position;
 
@@ -57,7 +59,9 @@ public class ThirdPersonShooterController : MonoBehaviour
             mouseWorldPosition = raycastHit.point;
             hitTransform = raycastHit.transform;
         }
+        #endregion
 
+        #region AIMING
         //if aiming is enabled, activate the aim camera and set the sensitivity to the aim sensitivity
         if (starterAssetsInputs.aim)
         {
@@ -66,7 +70,7 @@ public class ThirdPersonShooterController : MonoBehaviour
             //aim animation
             animator.SetLayerWeight(1, Mathf.Lerp(animator.GetLayerWeight(1), 1f, Time.deltaTime * 10f));
 
-
+            #region LOOK AT MOUSE POS WHILE AIMING
             //make player character look where the player is aiming
             thirdPersonController.SetRotateOnMove(false);
 
@@ -79,11 +83,13 @@ public class ThirdPersonShooterController : MonoBehaviour
 
             //turn on aimRig
             aimRig.weight = Mathf.Lerp(aimRig.weight, 1f, Time.deltaTime * 10f);
+            #endregion
 
             //if shooting is enabled, instantiate the hit or miss VFX
             if (starterAssetsInputs.shoot && bulletCounter.canShoot)
             {
                 CinemachineShake.Instance.ShakeCamera(1f, 0.1f);
+
                 Instantiate(shootVFX, firePos, Quaternion.identity);
                 bulletCounter.Shoot();
 
@@ -105,7 +111,8 @@ public class ThirdPersonShooterController : MonoBehaviour
                 }
                 starterAssetsInputs.shoot = false;
             }
-        } else
+        } 
+        else
         {
             aimVirtualCamera.gameObject.SetActive(false);
             thirdPersonController.SetSensitivity(normalSensitivity);
@@ -116,7 +123,9 @@ public class ThirdPersonShooterController : MonoBehaviour
             //turn off aimRig
             aimRig.weight = Mathf.Lerp(aimRig.weight, 0f, Time.deltaTime * 10f);
         }
-        
+        #endregion
+
+
     }
 
 }

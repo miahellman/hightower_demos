@@ -206,6 +206,21 @@ namespace StarterAssets
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier * Sensitivity;
             }
 
+            //if aiming, change clamp angles (so player cant see how bad the legs look while aiming lmfao)
+            if (_input.aim)
+            {
+                //aiming clamp angles
+                TopClamp = 40.0f;
+                BottomClamp = -30.0f;
+            }
+            else
+            {
+                //normal clamp angles
+                TopClamp = 70.0f;
+                BottomClamp = -30.0f;
+            }
+
+
             // clamp our rotations so our values are limited 360 degrees
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);

@@ -39,21 +39,13 @@ public class BulletCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentBullets > 0)
-        {
-            canShoot = true;
-            canReload = false;
-        }
-        else
-        {
-            canShoot = false;
-            canReload = true;
-        }
+        //shoot and reload logic
+        if (currentBullets > 0) {canShoot = true;} else {canShoot = false;}
 
-        if (canReload && starterAssetsInputs.reload)
-        {
-            StartCoroutine(ReloadTimer());
-        }
+        if (currentBullets < maxBullets) {canReload = true;} else { canReload = false;}
+
+        //start reload timer
+        if (canReload && starterAssetsInputs.reload) { StartCoroutine(ReloadTimer());}
 
         //update ui with current bullets and magazines
         bulletCounterUI.text = currentBullets.ToString() + " / " + currentMagazines.ToString();
